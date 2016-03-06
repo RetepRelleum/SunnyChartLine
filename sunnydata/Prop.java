@@ -23,28 +23,50 @@ import sunnychartline.FXMLDocumentController;
  */
 public class Prop extends Properties {
 
+    /**
+     *
+     */
     public Prop() {
         loadParams();
     }
 
+    /**
+     *
+     * @return
+     */
     public String getDirData() {
         return getProperty("dirData", "C:\\SunnyData\\data");
     }
 
+    /**
+     *
+     * @param text
+     */
     public void setDirData(String text) {
         setProperty("dirData", text);
         saveParamChanges();
     }
 
+    /**
+     *
+     * @return
+     */
     public String getDirOutput() {
         return getProperty("dirOutput", "C:\\SunnyData\\");
     }
 
+    /**
+     *
+     * @param text
+     */
     public void setDirOutput(String text) {
         setProperty("dirOutput", text);
         saveParamChanges();
     }
 
+    /**
+     *
+     */
     public void saveParamChanges() {
         OutputStream out = null;
         try {
@@ -78,10 +100,18 @@ public class Prop extends Properties {
         }
     }
 
+    /**
+     *
+     * @return
+     */
     public double getSliderValue() {
          return Double.parseDouble(getProperty("sliderValue", "2.5"));
     }
     
+    /**
+     *
+     * @param value
+     */
     public void setSliderValue(double value) {
            setProperty("sliderValue",""+value);
         saveParamChanges();
