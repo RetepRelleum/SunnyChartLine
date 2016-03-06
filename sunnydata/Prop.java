@@ -18,7 +18,7 @@ import java.util.logging.Logger;
 import sunnychartline.FXMLDocumentController;
 
 /**
- *
+ * 
  * @author Peter
  */
 public class Prop extends Properties {
@@ -65,9 +65,9 @@ public class Prop extends Properties {
     }
 
     /**
-     *
+     * Speicher die Variabeln im einem File
      */
-    public void saveParamChanges() {
+    private void saveParamChanges() {
         OutputStream out = null;
         try {
             File f = new File("properties.prop");
