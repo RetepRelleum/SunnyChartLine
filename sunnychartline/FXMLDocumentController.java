@@ -15,11 +15,15 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-
 package sunnychartline;
 
 import java.io.File;
 import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.chrono.ChronoLocalDate;
+import java.util.Locale;
 import java.util.ResourceBundle;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
@@ -27,6 +31,8 @@ import javafx.fxml.Initializable;
 import javafx.print.PrinterJob;
 import javafx.scene.Node;
 import javafx.scene.chart.LineChart;
+import javafx.scene.control.DateCell;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TabPane;
@@ -37,6 +43,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.shape.MeshView;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
+import javafx.util.Callback;
 import sunnydata.DataTag;
 import sunnydata.DataTagVector;
 import sunnydata.DataViertelStdVector;
@@ -49,7 +56,6 @@ import sunnydata.Xform;
  * @author Peter
  */
 public class FXMLDocumentController implements Initializable {
-
     final Xform world = new Xform();
     private double scale = 0;
     private static final double CONTROL_MULTIPLIER = 0.1;
@@ -96,17 +102,14 @@ public class FXMLDocumentController implements Initializable {
         dataTagVector = new DataTagVector();
         for (File file : new File(prop.getDirData()).listFiles((File dir, String name) -> name.startsWith("Energie_und_Leistung_Tag"))) {
             float f = (float) (prop.getSliderValue());
-            dataTagVector.add(new DataTag(file, f));
+            DataTag dataTag = new DataTag(file, f);
+            dataTagVector.add(dataTag);
         }
-        
         dataViertelStdVector = new DataViertelStdVector(dataTagVector);
         world.reset();
-
         world.getChildren().add(dataTagVector.getMesh().getXform());
-
     }
 
-    @Override
     public void initialize(URL url, ResourceBundle rb) {
 
         wertW25IdSlider.setValue(prop.getSliderValue());

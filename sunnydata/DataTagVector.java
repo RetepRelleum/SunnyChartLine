@@ -187,4 +187,8 @@ public class DataTagVector extends Vector<DataTag> {
         return super.add(e);
     }
 
+    public boolean contains(String st) {
+        return true;
+    }
+
 }
