@@ -15,7 +15,7 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sunnychartline.FXMLDocumentController">
+<BorderPane fx:id="bp" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sunnychartline.FXMLDocumentController">
    <center>
       <TabPane fx:id="tapPane" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
         <tabs>
@@ -111,7 +111,13 @@
                                     <Button contentDisplay="RIGHT" mnemonicParsing="false" onAction="#getFileDirOutput" prefHeight="17.0" prefWidth="57.0" text="Ändern" BorderPane.alignment="CENTER" />
                                  </right>
                               </BorderPane>
-                              <BorderPane layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0" />
+                              <BorderPane layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0">
+                                 <right>
+                                    <ListView fx:id="listView" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+                                 </right>
+                                 <left>
+                                    <Label text="Übersicht vorhandene Daten" BorderPane.alignment="CENTER" />
+                                 </left></BorderPane>
                            </children></VBox>
                      </center>
                   </BorderPane>
@@ -121,7 +127,7 @@
       </TabPane>
    </center>
    <top>
-      <MenuBar BorderPane.alignment="CENTER">
+      <MenuBar fx:id="menuBar" BorderPane.alignment="CENTER">
         <menus>
           <Menu mnemonicParsing="false" text="File">
             <items>

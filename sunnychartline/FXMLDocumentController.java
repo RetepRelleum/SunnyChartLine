@@ -20,10 +20,9 @@ package sunnychartline;
 import java.io.File;
 import java.net.URL;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.chrono.ChronoLocalDate;
-import java.util.Locale;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.ResourceBundle;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
@@ -31,19 +30,19 @@ import javafx.fxml.Initializable;
 import javafx.print.PrinterJob;
 import javafx.scene.Node;
 import javafx.scene.chart.LineChart;
-import javafx.scene.control.DateCell;
-import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
+import javafx.scene.control.MenuBar;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TabPane;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.MeshView;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
-import javafx.util.Callback;
 import sunnydata.DataTag;
 import sunnydata.DataTagVector;
 import sunnydata.DataViertelStdVector;
@@ -56,6 +55,7 @@ import sunnydata.Xform;
  * @author Peter
  */
 public class FXMLDocumentController implements Initializable {
+
     final Xform world = new Xform();
     private double scale = 0;
     private static final double CONTROL_MULTIPLIER = 0.1;
@@ -93,6 +93,10 @@ public class FXMLDocumentController implements Initializable {
 
     @FXML
     Pane pane;
+    @FXML
+    ListView listView;
+    @FXML
+    BorderPane bp;
 
     public FXMLDocumentController() {
         init();
@@ -104,6 +108,7 @@ public class FXMLDocumentController implements Initializable {
             float f = (float) (prop.getSliderValue());
             DataTag dataTag = new DataTag(file, f);
             dataTagVector.add(dataTag);
+
         }
         dataViertelStdVector = new DataViertelStdVector(dataTagVector);
         world.reset();
@@ -111,7 +116,6 @@ public class FXMLDocumentController implements Initializable {
     }
 
     public void initialize(URL url, ResourceBundle rb) {
-
         wertW25IdSlider.setValue(prop.getSliderValue());
         textIdW25.setText("Schwelle Eigenverbrauch " + wertW25IdSlider.getValue() + " kW");
         sunnyMesh = dataTagVector.getMesh();
@@ -124,6 +128,26 @@ public class FXMLDocumentController implements Initializable {
         pane.heightProperty().addListener((ObservableValue<? extends Number> observable, Number oldValue, Number newValue) -> {
             onTab3d();
         });
+        long dd = dataTagVector.get(0).getMillis();
+        GregorianCalendar gregorianCalendar = new GregorianCalendar();
+        gregorianCalendar.setTimeInMillis(dd);
+
+        SimpleDateFormat dt = new SimpleDateFormat("dd.MM.yyyy");
+        int lauf = 0;
+        while (gregorianCalendar.getTimeInMillis() < System.currentTimeMillis()) {
+            Label label = new Label();
+            label.setText(dt.format(gregorianCalendar.getTime()));
+            String s = dt.format(new Date(gregorianCalendar.getTimeInMillis()));
+
+            if ((lauf < dataTagVector.size()) && (dataTagVector.get(lauf).getTag().equalsIgnoreCase(s))) {
+                label.setStyle("-fx-background-color: #DCDCDC");
+                lauf++;
+            } else {
+                label.setStyle("-fx-background-color: #FFD700");
+            }
+            listView.getItems().add(label);
+            gregorianCalendar.add(Calendar.DAY_OF_MONTH, 1);
+        }
 
     }
 
@@ -253,6 +277,7 @@ public class FXMLDocumentController implements Initializable {
     public void setOnMouseScroll(ScrollEvent me) {
         scale = scale + 0.1 * Math.signum(me.getDeltaY());
         world.setScale(scale);
+        tapPane.autosize();
     }
 
     public void setOnMouseReleased() {
